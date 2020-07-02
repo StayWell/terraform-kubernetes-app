@@ -1,21 +1,22 @@
 variable "host" {
   description = "https://www.terraform.io/docs/providers/kubernetes/r/ingress.html#host"
-  default     = "jenkins"
+  default     = ""
 }
 
-variable "cpu" {
-  description = "https://www.terraform.io/docs/providers/kubernetes/r/deployment.html#cpu"
-  default     = "500m"
-}
+variable "resources" {
+  description = "https://www.terraform.io/docs/providers/kubernetes/r/deployment.html#resources-1"
 
-variable "memory" {
-  description = "https://www.terraform.io/docs/providers/kubernetes/r/deployment.html#memory"
-  default     = "1Gi"
-}
+  default = {
+    requests = {
+      cpu    = 0
+      memory = 0
+    }
 
-variable "storage" {
-  description = "https://www.terraform.io/docs/providers/kubernetes/r/persistent_volume_claim.html#requests"
-  default     = "5Gi"
+    limits = {
+      cpu    = 2
+      memory = "8Gi"
+    }
+  }
 }
 
 variable "image" {
@@ -39,4 +40,18 @@ variable "port" {
 variable "ssl_redirect" {
   description = "https://kubernetes.github.io/ingress-nginx/user-guide/tls/#server-side-https-enforcement-through-redirect"
   default     = true
+}
+
+variable "service_type" {
+  description = "https://www.terraform.io/docs/providers/kubernetes/r/service.html#type"
+  default     = "ClusterIP"
+}
+
+variable "config" {
+  description = "Loaded as environment variables to the application pods"
+
+  default = {
+    this  = "that"
+    those = "these"
+  }
 }

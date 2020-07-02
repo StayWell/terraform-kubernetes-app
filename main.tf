@@ -7,14 +7,14 @@ resource "kubernetes_deployment" "this" {
   spec {
     selector {
       match_labels = {
-        app = var.name
+        selector = var.name
       }
     }
 
     template {
       metadata {
         labels = {
-          app = var.name
+          selector = var.name
         }
       }
 
@@ -25,18 +25,27 @@ resource "kubernetes_deployment" "this" {
 
           resources {
             requests {
-              cpu    = var.cpu
-              memory = var.memory
+              cpu    = var.resources.requests.cpu
+              memory = var.resources.requests.memory
             }
-          }
 
-          env {
-            name  = "VAR"
-            value = "value"
+            limits {
+              cpu    = var.resources.limits.cpu
+              memory = var.resources.limits.memory
+            }
           }
 
           port {
             container_port = var.port
+          }
+
+          dynamic "env" {
+            for_each = var.config
+
+            content {
+              name  = env.key
+              value = env.value
+            }
           }
         }
       }
@@ -53,20 +62,19 @@ resource "kubernetes_deployment" "this" {
 
 resource "kubernetes_service" "this" {
   metadata {
-    name      = "this"
+    name      = var.name
     namespace = var.namespace
   }
 
   spec {
-    type = "NodePort"
+    type = var.service_type
 
     selector = {
-      app = var.name
+      selector = var.name
     }
 
     port {
-      name      = "http"
-      port      = var.port
+      port = var.port
     }
   }
 
@@ -79,8 +87,10 @@ resource "kubernetes_service" "this" {
 }
 
 resource "kubernetes_ingress" "this" {
+  count = var.host == "" ? 0 : 1
+
   metadata {
-    name      = "this"
+    name      = var.name
     namespace = var.namespace
 
     annotations = {
@@ -99,8 +109,8 @@ resource "kubernetes_ingress" "this" {
           path = "/"
 
           backend {
-            service_name = kubernetes_service.this.metadata[0].name
-            service_port = kubernetes_service.this.spec[0].port[0].port
+            service_name = var.name
+            service_port = var.port
           }
         }
       }
