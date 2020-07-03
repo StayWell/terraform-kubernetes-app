@@ -47,6 +47,11 @@ variable "service_type" {
   default     = "ClusterIP"
 }
 
+variable "replicas" {
+  description = "https://www.terraform.io/docs/providers/kubernetes/r/deployment.html#replicas"
+  default     = 1
+}
+
 variable "config" {
   description = "Loaded as environment variables to the application pods"
 

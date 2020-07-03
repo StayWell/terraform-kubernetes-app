@@ -5,6 +5,8 @@ resource "kubernetes_deployment" "this" {
   }
 
   spec {
+    replicas = var.replicas
+
     selector {
       match_labels = {
         selector = var.name
