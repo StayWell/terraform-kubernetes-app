@@ -51,7 +51,10 @@ resource "kubernetes_deployment" "this" {
           }
 
           env_from {
-            secret_ref = var.secret_ref
+            secret_ref {
+              name     = var.secret_name
+              optional = true
+            }
           }
         }
       }
