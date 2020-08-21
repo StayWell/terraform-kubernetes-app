@@ -50,10 +50,13 @@ resource "kubernetes_deployment" "this" {
             }
           }
 
-          env_from {
-            secret_ref {
-              name     = var.secret_name
-              optional = true
+          dynamic "env_from" {
+            for_each = var.secrets
+
+            content {
+              secret_ref {
+                name = env_from.value
+              }
             }
           }
         }

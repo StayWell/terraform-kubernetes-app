@@ -52,9 +52,9 @@ variable "replicas" {
   default     = 1
 }
 
-variable "secret_name" {
-  description = "https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/deployment#name"
-  default     = ""
+variable "secrets" {
+  description = "List of secret names from which env_from blocks will be generated"
+  default     = []
 }
 
 variable "config" {
