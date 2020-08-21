@@ -52,6 +52,11 @@ variable "replicas" {
   default     = 1
 }
 
+variable "secret_ref" {
+  description = "https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/deployment#secret_ref"
+  default     = ""
+}
+
 variable "config" {
   description = "Loaded as environment variables to the application pods"
 
