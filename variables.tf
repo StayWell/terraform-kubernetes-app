@@ -52,8 +52,8 @@ variable "replicas" {
   default     = 1
 }
 
-variable "secret_ref" {
-  description = "https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/deployment#secret_ref"
+variable "secret_name" {
+  description = "https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/deployment#name"
   default     = ""
 }
 
