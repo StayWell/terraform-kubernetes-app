@@ -57,6 +57,11 @@ variable "secrets" {
   default     = []
 }
 
+variable "wait_for_rollout" {
+  description = "https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/deployment#wait_for_rollout"
+  default     = true
+}
+
 variable "config" {
   description = "Loaded as environment variables to the application pods"
 
