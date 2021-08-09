@@ -43,6 +43,26 @@ resource "kubernetes_deployment" "this" {
             container_port = var.port
           }
 
+          dynamic "liveness_probe" {
+            for_each = [ var.liveness_probe ]
+            content {
+              http_get {
+                path = liveness_probe.value["path"]
+                port = var.port
+
+                http_header {
+                  name  = "X-Whs-Kubernetes-Liveness-Probe"
+                  value = "true"
+                }
+              }
+
+              initial_delay_seconds = liveness_probe.value["initial_delay"]
+              period_seconds        = liveness_probe.value["frequency"]
+              success_threshold     = liveness_probe.value["success_threshold"]
+              failure_threshold     = liveness_probe.value["failure_threshold"]
+            }
+          }
+
           dynamic "env" {
             for_each = var.config
 
