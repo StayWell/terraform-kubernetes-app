@@ -8,16 +8,16 @@ jobs:
       - name: Start Kubernetes
         run: minikube start
       - name: Initialize
-        run: terraform init test
+        run: terraform -chdir=test init
       - name: Validate
-        run: terraform validate test
+        run: terraform -chdir=test validate
       - name: Lint
         run: terraform fmt -recursive -check
       - name: Apply
-        run: terraform apply -auto-approve test
+        run: terraform -chdir=test apply -auto-approve
       - name: Apply Idempotency Check
-        run: terraform plan -detailed-exitcode test
+        run: terraform -chdir=test plan -detailed-exitcode
       - name: Destroy
-        run: terraform destroy -auto-approve test
+        run: terraform -chdir=test destroy -auto-approve
       - name: Destroy Idempotency Check
-        run: terraform plan -detailed-exitcode -destroy test
+        run: terraform -chdir=test plan -detailed-exitcode -destroy
