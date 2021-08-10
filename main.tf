@@ -44,7 +44,7 @@ resource "kubernetes_deployment" "this" {
           }
 
           dynamic "liveness_probe" {
-            for_each = [ var.liveness_probe ]
+            for_each = var.liveness_probe == null ? [ ] : [ var.liveness_probe ]
             content {
               http_get {
                 path = liveness_probe.value["path"]
@@ -60,6 +60,7 @@ resource "kubernetes_deployment" "this" {
               period_seconds        = liveness_probe.value["frequency"]
               success_threshold     = liveness_probe.value["success_threshold"]
               failure_threshold     = liveness_probe.value["failure_threshold"]
+              timeout_seconds       = liveness_probe.value["timeout"]
             }
           }
 
