@@ -70,3 +70,15 @@ variable "config" {
     those = "these"
   }
 }
+
+variable "liveness_probe" {
+  description = "The URL to use in the app's liveness probe."
+  type        = object({
+    path              = string
+    initial_delay     = number
+    frequency         = number
+    success_threshold = number
+    failure_threshold = number
+  })
+  default = null
+}
