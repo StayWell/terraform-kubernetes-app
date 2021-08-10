@@ -74,11 +74,12 @@ variable "config" {
 variable "liveness_probe" {
   description = "The URL to use in the app's liveness probe."
   type        = object({
-    path              = string
-    initial_delay     = number
-    frequency         = number
-    success_threshold = number
     failure_threshold = number
+    frequency         = number
+    initial_delay     = number
+    path              = string
+    success_threshold = number
+    timeout           = number
   })
   default = null
 }

@@ -60,6 +60,7 @@ resource "kubernetes_deployment" "this" {
               period_seconds        = liveness_probe.value["frequency"]
               success_threshold     = liveness_probe.value["success_threshold"]
               failure_threshold     = liveness_probe.value["failure_threshold"]
+              timeout_seconds       = liveness_probe.value["timeout"]
             }
           }
 
