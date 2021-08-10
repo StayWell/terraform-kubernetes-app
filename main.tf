@@ -44,7 +44,7 @@ resource "kubernetes_deployment" "this" {
           }
 
           dynamic "liveness_probe" {
-            for_each = [ var.liveness_probe ]
+            for_each = var.liveness_probe == null ? [ ] : [ var.liveness_probe ]
             content {
               http_get {
                 path = liveness_probe.value["path"]
