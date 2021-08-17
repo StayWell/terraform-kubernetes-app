@@ -19,6 +19,11 @@ variable "resources" {
   }
 }
 
+variable "disable_liveness_probe" {
+  description = "If true, omits the liveness probe from the app's definition. Default is \"false\"."
+  default     = false
+}
+
 variable "image" {
   description = "https://www.terraform.io/docs/providers/kubernetes/r/deployment.html#image"
 }
