@@ -1,22 +1,17 @@
+
+variable "cpu_limit" {
+  description = "The maximum CPU. Format is Xm, which is X thousandths of a CPU, e.g. 2000m would be 2 CPUs. The default is 2 CPUs. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
+  default = "2000m"
+}
+
+variable "cpu_request" {
+  description = "The amount of CPU to request. Format is Xm, which represent X thousandths of a CPU, e.g. 500m would be half a CPU. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
+  default = 0
+}
+
 variable "host" {
   description = "https://www.terraform.io/docs/providers/kubernetes/r/ingress.html#host"
   default     = ""
-}
-
-variable "resources" {
-  description = "https://www.terraform.io/docs/providers/kubernetes/r/deployment.html#resources-1"
-
-  default = {
-    requests = {
-      cpu    = 0
-      memory = 0
-    }
-
-    limits = {
-      cpu    = 2
-      memory = "8Gi"
-    }
-  }
 }
 
 variable "disable_liveness_probe" {
@@ -26,6 +21,16 @@ variable "disable_liveness_probe" {
 
 variable "image" {
   description = "https://www.terraform.io/docs/providers/kubernetes/r/deployment.html#image"
+}
+
+variable "mem_limit" {
+  description = "The maximum amount of memory to reserve. Default is 8Gi. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
+  default = "8Gi"
+}
+
+variable "mem_request" {
+  description = "The amount of memory to request. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
+  default = 0
 }
 
 variable "name" {

@@ -29,13 +29,13 @@ resource "kubernetes_deployment" "this" {
 
           resources {
             requests {
-              cpu    = var.resources.requests.cpu
-              memory = var.resources.requests.memory
+              cpu    = var.cpu_request
+              memory = var.mem_request
             }
 
             limits {
-              cpu    = var.resources.limits.cpu
-              memory = var.resources.limits.memory
+              cpu    = var.cpu_limit
+              memory = var.mem_limit
             }
           }
 
