@@ -19,8 +19,26 @@ variable "disable_liveness_probe" {
   default     = false
 }
 
+variable "disable_startup_probe" {
+  description = "If true, omits the startup probe from the app's definition. Default is \"false\"."
+  default     = false
+}
+
 variable "image" {
   description = "https://www.terraform.io/docs/providers/kubernetes/r/deployment.html#image"
+}
+
+variable "liveness_probe" {
+  description = "The URL to use in the app's liveness probe."
+  type        = object({
+    failure_threshold = number
+    frequency         = number
+    initial_delay     = number
+    path              = string
+    success_threshold = number
+    timeout           = number
+  })
+  default = null
 }
 
 variable "mem_limit" {
@@ -47,6 +65,11 @@ variable "port" {
   default     = "8080"
 }
 
+variable "pre_stop_sleep_seconds" {
+  description = "The number of seconds to sleep before stopping the app. This gives Kubernetes time to stop sending traffic to the app. The default is not to sleep."
+  default     = 0
+}
+
 variable "ssl_redirect" {
   description = "https://kubernetes.github.io/ingress-nginx/user-guide/tls/#server-side-https-enforcement-through-redirect"
   default     = true
@@ -55,6 +78,19 @@ variable "ssl_redirect" {
 variable "service_type" {
   description = "https://www.terraform.io/docs/providers/kubernetes/r/service.html#type"
   default     = "ClusterIP"
+}
+
+variable "startup_probe" {
+  description = "Configuration for the app's startup probe, if any."
+  type        = object({
+    failure_threshold = number
+    frequency         = number
+    initial_delay     = number
+    path              = string
+    success_threshold = number
+    timeout           = number
+  })
+  default = null
 }
 
 variable "replicas" {
@@ -79,17 +115,4 @@ variable "config" {
     this  = "that"
     those = "these"
   }
-}
-
-variable "liveness_probe" {
-  description = "The URL to use in the app's liveness probe."
-  type        = object({
-    failure_threshold = number
-    frequency         = number
-    initial_delay     = number
-    path              = string
-    success_threshold = number
-    timeout           = number
-  })
-  default = null
 }
