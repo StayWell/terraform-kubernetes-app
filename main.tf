@@ -23,6 +23,10 @@ resource "kubernetes_deployment" "this" {
       }
 
       spec {
+
+        # Applies to all containers in the pod.
+        termination_grace_period_seconds = var.termination_grace_period_seconds + var.pre_stop_sleep_seconds
+
         container {
           name  = "this"
           image = var.image

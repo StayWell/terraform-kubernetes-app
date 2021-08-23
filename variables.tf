@@ -67,6 +67,7 @@ variable "port" {
 
 variable "pre_stop_sleep_seconds" {
   description = "The number of seconds to sleep before stopping the app. This gives Kubernetes time to stop sending traffic to the app. The default is not to sleep."
+  type        = number
   default     = 0
 }
 
@@ -101,6 +102,12 @@ variable "replicas" {
 variable "secrets" {
   description = "List of secret names from which env_from blocks will be generated"
   default     = []
+}
+
+variable "termination_grace_period_seconds" {
+  description = "The amount of time Kubernetes should wait before forcibly killing a pod. Default is 30 seconds plus  `pre_stop_sleep_seconds`."
+  type        = number
+  default     = 30
 }
 
 variable "wait_for_rollout" {
