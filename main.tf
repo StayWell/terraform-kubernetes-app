@@ -23,24 +23,36 @@ resource "kubernetes_deployment" "this" {
       }
 
       spec {
+
+        # Applies to all containers in the pod.
+        termination_grace_period_seconds = var.termination_grace_period_seconds + var.pre_stop_sleep_seconds
+
         container {
           name  = "this"
           image = var.image
 
           resources {
             requests {
-              cpu    = var.resources.requests.cpu
-              memory = var.resources.requests.memory
+              cpu    = var.cpu_request
+              memory = var.mem_request
             }
 
             limits {
-              cpu    = var.resources.limits.cpu
-              memory = var.resources.limits.memory
+              cpu    = var.cpu_limit
+              memory = var.mem_limit
             }
           }
 
           port {
             container_port = var.port
+          }
+
+          lifecycle {
+            pre_stop {
+              exec {
+                command = [ "sleep", var.pre_stop_sleep_seconds ]
+              }
+            }
           }
 
           dynamic "liveness_probe" {
@@ -61,6 +73,27 @@ resource "kubernetes_deployment" "this" {
               success_threshold     = liveness_probe.value["success_threshold"]
               failure_threshold     = liveness_probe.value["failure_threshold"]
               timeout_seconds       = liveness_probe.value["timeout"]
+            }
+          }
+
+          dynamic "startup_probe" {
+            for_each = var.startup_probe == null || var.disable_startup_probe ? [ ] : [ var.startup_probe ]
+            content {
+              http_get {
+                path = startup_probe.value["path"]
+                port = var.port
+
+                http_header {
+                  name  = "X-Whs-Kubernetes-Startup-Probe"
+                  value = "true"
+                }
+              }
+
+              initial_delay_seconds = startup_probe.value["initial_delay"]
+              period_seconds        = startup_probe.value["frequency"]
+              success_threshold     = startup_probe.value["success_threshold"]
+              failure_threshold     = startup_probe.value["failure_threshold"]
+              timeout_seconds       = startup_probe.value["timeout"]
             }
           }
 
