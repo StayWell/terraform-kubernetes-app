@@ -34,12 +34,12 @@ resource "kubernetes_deployment" "this" {
           image = var.image
 
           resources {
-            requests {
+            requests = {
               cpu    = var.cpu_request
               memory = var.mem_request
             }
 
-            limits {
+            limits = {
               cpu    = var.cpu_limit
               memory = var.mem_limit
             }
