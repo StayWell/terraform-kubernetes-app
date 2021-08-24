@@ -1,10 +1,12 @@
 resource "kubernetes_deployment" "this" {
   wait_for_rollout = var.wait_for_rollout
-  
+
   metadata {
     name      = var.name
     namespace = var.namespace
   }
+
+  depends_on = [var.namespace]
 
   spec {
     replicas = var.replicas
@@ -50,13 +52,13 @@ resource "kubernetes_deployment" "this" {
           lifecycle {
             pre_stop {
               exec {
-                command = [ "sleep", var.pre_stop_sleep_seconds ]
+                command = ["sleep", var.pre_stop_sleep_seconds]
               }
             }
           }
 
           dynamic "liveness_probe" {
-            for_each = var.liveness_probe == null || var.disable_liveness_probe ? [ ] : [ var.liveness_probe ]
+            for_each = var.liveness_probe == null || var.disable_liveness_probe ? [] : [var.liveness_probe]
             content {
               http_get {
                 path = liveness_probe.value["path"]
@@ -77,7 +79,7 @@ resource "kubernetes_deployment" "this" {
           }
 
           dynamic "startup_probe" {
-            for_each = var.startup_probe == null || var.disable_startup_probe ? [ ] : [ var.startup_probe ]
+            for_each = var.startup_probe == null || var.disable_startup_probe ? [] : [var.startup_probe]
             content {
               http_get {
                 path = startup_probe.value["path"]
@@ -134,6 +136,8 @@ resource "kubernetes_service" "this" {
     namespace = var.namespace
   }
 
+  depends_on = [var.namespace, kubernetes_deployment.this]
+
   spec {
     type = var.service_type
 
@@ -167,6 +171,13 @@ resource "kubernetes_ingress" "this" {
       "nginx.ingress.kubernetes.io/force-ssl-redirect" = var.ssl_redirect
     }
   }
+
+  depends_on = [
+    var.namespace,
+    kubernetes_deployment.this,
+    kubernetes_service.this,
+    kubernetes_ingress.this
+  ]
 
   spec {
     rule {
