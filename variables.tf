@@ -1,12 +1,12 @@
 
 variable "cpu_limit" {
   description = "The maximum CPU. Format is Xm, which is X thousandths of a CPU, e.g. 2000m would be 2 CPUs. The default is 2 CPUs. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
-  default = "2000m"
+  default     = "2000m"
 }
 
 variable "cpu_request" {
   description = "The amount of CPU to request. Format is Xm, which represent X thousandths of a CPU, e.g. 500m would be half a CPU. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
-  default = 0
+  default     = 0
 }
 
 variable "host" {
@@ -30,7 +30,7 @@ variable "image" {
 
 variable "liveness_probe" {
   description = "The URL to use in the app's liveness probe."
-  type        = object({
+  type = object({
     failure_threshold = number
     frequency         = number
     initial_delay     = number
@@ -43,12 +43,12 @@ variable "liveness_probe" {
 
 variable "mem_limit" {
   description = "The maximum amount of memory to reserve. Default is 8Gi. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
-  default = "8Gi"
+  default     = "8Gi"
 }
 
 variable "mem_request" {
   description = "The amount of memory to request. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
-  default = 0
+  default     = 0
 }
 
 variable "name" {
@@ -83,7 +83,7 @@ variable "service_type" {
 
 variable "startup_probe" {
   description = "Configuration for the app's startup probe, if any."
-  type        = object({
+  type = object({
     failure_threshold = number
     frequency         = number
     initial_delay     = number
